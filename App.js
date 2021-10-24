@@ -78,13 +78,16 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>ToDo List</Text>
+      </View>
       <FlatList data={data} 
       keyExtractor={ (item) => item.id } renderItem={Renderer}
       ListEmptyComponent={() => <EmptyList/>} />
       <View style={styles.footer}>
         <TextInput 
           style={styles.input} 
-          placeholder="min 3 characters"
+          placeholder="Add Task...min 3 characters"
           onChangeText={onTextChange}
           value={input}/>
         <TouchableOpacity 
@@ -105,10 +108,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#daddf2',
     marginTop: Constants.statusBarHeight
   },
+  header: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
   footer: {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom:20,
+    margin:10,
+  },
+  title:{
+    fontSize: 30,
+    margin: 10,
+    fontWeight: 'bold',
+    color: '#0c154d',
   },
   input:{
     backgroundColor: '#d6ebff',
@@ -117,11 +130,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     flex: 1,
+    borderRadius: 10,
   },
   button: {
-    backgroundColor: '#0000FF',
+    backgroundColor: '#0c154d',
     borderColor: '#DDDDDD',
     borderWidth: 1,
+    borderRadius: 50,
   },
   buttonText: {
     color: '#FFF',
@@ -131,11 +146,13 @@ const styles = StyleSheet.create({
   buttonTextDisabled: {
     color: '#000',
     padding: 10,
+    
 
   },
   buttonDisabled: {
     backgroundColor: '#C0C0C0',
     borderColor: '#DDDDDD',
     borderWidth: 1,
+    borderRadius: 50,
   },
 });

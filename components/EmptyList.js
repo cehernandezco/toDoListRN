@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     },
     emptyText:{
         color:"#fff",
-        fontFamily:"poppins-bold",
         marginTop: 30,
         fontSize: 30,
     },
