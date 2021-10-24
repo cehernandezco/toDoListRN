@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {Alert, View, Text, StyleSheet, Button} from 'react-native';
+import React from 'react';
+import {Alert, View, Text, StyleSheet} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Moment from 'moment';
@@ -31,13 +31,13 @@ export const Item = (props) => {
       container: {
           padding:10,
           backgroundColor: '#0c154d',
-          borderBottomColor: 'black',
+          borderBottomColor: 'gray',
           borderBottomWidth: 1,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           margin: 1,
-          borderRadius: 20,
+          borderRadius: 50,
 
       },
       containerDone: {
