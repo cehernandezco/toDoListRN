@@ -5,6 +5,8 @@ import Constants from 'expo-constants';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
+console.reportErrorsAsExceptions = false;
+
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
@@ -42,7 +44,9 @@ export default function App() {
 
   const onSubmit = (event) => {
     const id = new Date().getTime().toString()
-    const item = { id: id, name: input}
+    const createdAtDate = new Date().getTime()
+    const completedAtDate = new Date().getTime().toString()
+    const item = { id: id, name: input, status: false, createdAt: createdAtDate, completedAt: null}
     setData( [...data, item])
     setInput(null)
     setValidInput(false)
@@ -58,6 +62,15 @@ export default function App() {
     })
     setData(newData)
     
+  }
+  const changeStatus = (id) => {
+    let items = [...data]
+    items.forEach( (item) => {
+      if( item.id === id ) {
+        item.status = true
+      }
+    })
+    setData( items )
   }
 
   const storeData = async() => {
@@ -91,7 +104,7 @@ export default function App() {
         //This is body text
       'Are you sure you want to delete task: '+item.name+'?',
       [
-        {text: 'Yes', onPress: () => onDelete(id)},
+        {text: 'Yes', onPress: () => onDelete(item.id)},
         {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
       ],
       { cancelable: false }
@@ -122,7 +135,10 @@ export default function App() {
         )}
         renderRightActions={({ item }) => (
           <SwipeableQuickActions>
-            <SwipeableQuickActionButton onPress={() => {}} text="Complete" />
+            <SwipeableQuickActionButton
+              style={styles.swipeComplete}
+              onPress={ () => changeStatus(item.id) }
+              text="Complete" />
             
           </SwipeableQuickActions>
         )}
@@ -202,6 +218,10 @@ const styles = StyleSheet.create({
   },
   swipeDelete:{
     backgroundColor: '#FF0000',
+    flex: 1,
+  },
+  swipeComplete:{
+    backgroundColor: '#29b248',
     flex: 1,
   }
 });

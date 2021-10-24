@@ -2,13 +2,13 @@ import React,{useState} from 'react';
 import {Alert, View, Text, StyleSheet, Button} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-
+import Moment from 'moment';
 export const Item = (props) => {
     
     const simpleAlertFunction = item => () => {
         //function to make simple alert
         Alert.alert('Task: '+ item.name+
-        '\nCreated at: '+ item.createdAt +
+        '\nCreated at: '+ Moment(new Date(item.createdAt)).format('DD MMM YYYY') +
         
         '\nNote: to delete swipe right'
         );
@@ -16,7 +16,7 @@ export const Item = (props) => {
     
     return(
       <View style={styles.container}>
-        <Text style={styles.text}>{props.text}</Text>
+        <Text style={(props.status) ? styles.textDone : styles.text}>{props.text}</Text>
         <FontAwesomeIcon icon={faInfoCircle} 
             style={styles.infoIcon}
             onPress={simpleAlertFunction(props.item)}
@@ -46,5 +46,10 @@ export const Item = (props) => {
       },
       infoIcon:{
           color: '#daddf2'
-      }
+      },
+      textDone: {
+        flex: 1,
+        textDecorationLine: "line-through",
+        color: "gray"
+      },
   })
