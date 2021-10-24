@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     },
     emptyText:{
         color:"#fff",
+
         marginTop: 30,
         fontSize: 30,
     },

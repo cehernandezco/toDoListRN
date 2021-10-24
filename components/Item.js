@@ -7,7 +7,7 @@ export const Item = (props) => {
     
     const simpleAlertFunction = item => () => {
         //function to make simple alert
-        let completedText = item.status?'\nCompleted at :'+Moment(new Date(item.completedAt)).format('DD MMM YYYY') :''
+        let completedText = item.status?'\nCompleted at: '+Moment(new Date(item.completedAt)).format() :''
 
         Alert.alert('Task: '+ item.name+
         '\nCreated at: '+ Moment(new Date(item.createdAt)).format('DD MMM YYYY') +
