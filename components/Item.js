@@ -7,22 +7,22 @@ export const Item = (props) => {
     
     const simpleAlertFunction = item => () => {
         //function to make simple alert
+        let completedText = item.status?'\nCompleted at :'+Moment(new Date(item.completedAt)).format('DD MMM YYYY') :''
+
         Alert.alert('Task: '+ item.name+
         '\nCreated at: '+ Moment(new Date(item.createdAt)).format('DD MMM YYYY') +
-        
+        completedText +
         '\nNote: to delete swipe right'
         );
       }
     
     return(
-      <View style={styles.container}>
-        <Text style={(props.status) ? styles.textDone : styles.text}>{props.text}</Text>
+      <View style={(props.item.status) ? styles.containerDone : styles.container}>
+        <Text style={(props.item.status) ? styles.textDone : styles.text}>{props.text}</Text>
         <FontAwesomeIcon icon={faInfoCircle} 
             style={styles.infoIcon}
             onPress={simpleAlertFunction(props.item)}
         />
-        
-        
       </View>
     )
   }
@@ -40,6 +40,18 @@ export const Item = (props) => {
           borderRadius: 20,
 
       },
+      containerDone: {
+        padding:10,
+        backgroundColor: '#C0C0C0',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 1,
+        borderRadius: 20,
+
+    },
       text: {
           flex:1,
           color: '#fff',

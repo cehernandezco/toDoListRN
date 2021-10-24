@@ -45,7 +45,7 @@ export default function App() {
   const onSubmit = (event) => {
     const id = new Date().getTime().toString()
     const createdAtDate = new Date().getTime()
-    const completedAtDate = new Date().getTime().toString()
+    const completedAtDate = new Date().getTime()
     const item = { id: id, name: input, status: false, createdAt: createdAtDate, completedAt: null}
     setData( [...data, item])
     setInput(null)
@@ -63,11 +63,18 @@ export default function App() {
     setData(newData)
     
   }
+
   const changeStatus = (id) => {
     let items = [...data]
     items.forEach( (item) => {
       if( item.id === id ) {
-        item.status = true
+        item.status = !item.status
+        if(item.status){
+          item.completedAt = new Date().getTime()
+        }else{
+          item.completedAt = null
+        }
+        
       }
     })
     setData( items )
@@ -96,7 +103,7 @@ export default function App() {
 
   const Renderer = ({item}) => ( <Item text={item.name} delete={onDelete} id={item.id} item={item} /> )
 
-  const twoOptionsAlertFunction = item => () => {
+  const deleteAlertFunction = item => () => {
     //function to make two option alert
     Alert.alert(
        //This is title
@@ -105,6 +112,21 @@ export default function App() {
       'Are you sure you want to delete task: '+item.name+'?',
       [
         {text: 'Yes', onPress: () => onDelete(item.id)},
+        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+      ],
+      { cancelable: false }
+      //on clicking out side, Alert will not dismiss
+    );
+  }
+  const completeAlertFunction = item => () => {
+    //function to make two option alert
+    Alert.alert(
+       //This is title
+      'Complete task',
+        //This is body text
+      'Are you sure you want to change status of task: '+item.name+'?',
+      [
+        {text: 'Yes', onPress: () => changeStatus(item.id)},
         {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
       ],
       { cancelable: false }
@@ -125,9 +147,9 @@ export default function App() {
         renderLeftActions={({ item }) => (
           <SwipeableQuickActions>
             <SwipeableQuickActionButton
-              onPress={twoOptionsAlertFunction(item)}
+              onPress={deleteAlertFunction(item)}
                             
-              text="delete"
+              text="Delete"
               style={styles.swipeDelete}
               textStyle={{ fontWeight: 'bold', color: 'white', backgroundColor: '#FF0000' }}
             />
@@ -136,9 +158,9 @@ export default function App() {
         renderRightActions={({ item }) => (
           <SwipeableQuickActions>
             <SwipeableQuickActionButton
-              style={styles.swipeComplete}
-              onPress={ () => changeStatus(item.id) }
-              text="Complete" />
+              style={item.status==true?styles.swipeDismark:styles.swipeComplete}
+              onPress={completeAlertFunction(item)}
+              text={item.status==true?"Dismark":"Complete"} />
             
           </SwipeableQuickActions>
         )}
@@ -222,6 +244,10 @@ const styles = StyleSheet.create({
   },
   swipeComplete:{
     backgroundColor: '#29b248',
+    flex: 1,
+  },
+  swipeDismark:{
+    backgroundColor: '#C0C0C0',
     flex: 1,
   }
 });
