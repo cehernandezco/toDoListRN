@@ -1,7 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, TextInput, LayoutAnimation, SafeAreaView } from 'react-native';
 import Constants from 'expo-constants';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
+import {
+  SwipeableFlatList,
+  SwipeableQuickActionButton,
+  SwipeableQuickActions,
+} from 'react-native-swipe-list';
 
 import {Item} from './components/Item'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,18 +80,54 @@ export default function App() {
     }
   }
 
-  
 
-  const Renderer = ({item}) => ( <Item text={item.name} delete={onDelete} id={item.id} /> )
+  const Renderer = ({item}) => ( <Item text={item.name} delete={onDelete} id={item.id} item={item} /> )
+
+  const twoOptionsAlertFunction = item => () => {
+    //function to make two option alert
+    Alert.alert(
+       //This is title
+      'Delete task',
+        //This is body text
+      'Are you sure you want to delete task: '+item.name+'?',
+      [
+        {text: 'Yes', onPress: () => onDelete(id)},
+        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+      ],
+      { cancelable: false }
+      //on clicking out side, Alert will not dismiss
+    );
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>ToDo List</Text>
       </View>
-      <FlatList data={data} 
-      keyExtractor={ (item) => item.id } renderItem={Renderer}
-      ListEmptyComponent={() => <EmptyList/>} />
+      <SwipeableFlatList
+        ListEmptyComponent={() => <EmptyList/>}
+        data={data}
+        renderItem={Renderer}
+        keyExtractor={ (item) => item.id } 
+        renderLeftActions={({ item }) => (
+          <SwipeableQuickActions>
+            <SwipeableQuickActionButton
+              onPress={twoOptionsAlertFunction(item)}
+                            
+              text="delete"
+              style={styles.swipeDelete}
+              textStyle={{ fontWeight: 'bold', color: 'white', backgroundColor: '#FF0000' }}
+            />
+          </SwipeableQuickActions>
+        )}
+        renderRightActions={({ item }) => (
+          <SwipeableQuickActions>
+            <SwipeableQuickActionButton onPress={() => {}} text="Complete" />
+            
+          </SwipeableQuickActions>
+        )}
+      />
+      
       <View style={styles.footer}>
         <TextInput 
           style={styles.input} 
@@ -94,6 +138,7 @@ export default function App() {
           style={(validInput)? styles.button : styles.buttonDisabled}
           disabled = {(validInput) ? false : true }
           onPress={onSubmit}>
+          
           <Text style={ (validInput)? styles.buttonText : styles.buttonTextDisabled}>Add to list</Text>
         </TouchableOpacity>
       </View>
@@ -155,4 +200,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
   },
+  swipeDelete:{
+    backgroundColor: '#FF0000',
+    flex: 1,
+  }
 });
